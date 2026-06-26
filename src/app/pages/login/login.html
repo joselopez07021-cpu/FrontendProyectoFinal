@@ -1,0 +1,117 @@
+<section
+  class="flex min-h-[75vh] items-center justify-center bg-pink-50 px-4 py-12"
+>
+  <div
+    class="w-full max-w-md rounded-2xl bg-white p-8 shadow-lg"
+  >
+    <div class="mb-8 text-center">
+      <h1 class="text-3xl font-bold text-gray-900">
+        Iniciar sesión
+      </h1>
+
+      <p class="mt-2 text-gray-600">
+        Ingresa a tu cuenta de GlowSkin
+      </p>
+    </div>
+
+    @if (mensajeError) {
+      <div
+        class="mb-5 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
+      >
+        {{ mensajeError }}
+      </div>
+    }
+
+    <form
+      [formGroup]="formulario"
+      (ngSubmit)="iniciarSesion()"
+      class="space-y-5"
+    >
+      <div>
+        <label
+          for="correo"
+          class="mb-2 block text-sm font-semibold text-gray-700"
+        >
+          Correo electrónico
+        </label>
+
+        <input
+          id="correo"
+          type="email"
+          formControlName="correo"
+          autocomplete="email"
+          placeholder="correo@ejemplo.com"
+          class="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none transition focus:border-pink-500 focus:ring-2 focus:ring-pink-200"
+        />
+
+        @if (
+          formulario.controls.correo.touched &&
+          formulario.controls.correo.hasError('required')
+        ) {
+          <p class="mt-1 text-sm text-red-600">
+            El correo es obligatorio.
+          </p>
+        }
+
+        @if (
+          formulario.controls.correo.touched &&
+          formulario.controls.correo.hasError('email')
+        ) {
+          <p class="mt-1 text-sm text-red-600">
+            Ingresa un correo válido.
+          </p>
+        }
+      </div>
+
+      <div>
+        <label
+          for="contrasena"
+          class="mb-2 block text-sm font-semibold text-gray-700"
+        >
+          Contraseña
+        </label>
+
+        <input
+          id="contrasena"
+          type="password"
+          formControlName="contrasena"
+          autocomplete="current-password"
+          placeholder="Ingresa tu contraseña"
+          class="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none transition focus:border-pink-500 focus:ring-2 focus:ring-pink-200"
+        />
+
+        @if (
+          formulario.controls.contrasena.touched &&
+          formulario.controls.contrasena.hasError('required')
+        ) {
+          <p class="mt-1 text-sm text-red-600">
+            La contraseña es obligatoria.
+          </p>
+        }
+      </div>
+
+      <button
+        type="submit"
+        [disabled]="cargando"
+        class="w-full rounded-lg bg-pink-600 px-4 py-3 font-semibold text-white transition hover:bg-pink-700 disabled:cursor-not-allowed disabled:opacity-60"
+      >
+        @if (cargando) {
+          Iniciando sesión...
+        } @else {
+          Iniciar sesión
+        }
+      </button>
+    </form>
+
+    <p class="mt-6 text-center text-sm text-gray-600">
+      ¿No tienes una cuenta?
+
+      <a
+        routerLink="/registro"
+        class="font-semibold text-pink-600 hover:text-pink-700"
+      >
+        Regístrate
+      </a>
+    </p>
+  </div>
+</section>

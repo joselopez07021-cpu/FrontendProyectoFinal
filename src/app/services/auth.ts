@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 
 import { environment } from '../../environments/environment';
 import { LoginRequest } from '../models/login-request';
+import { RegisterRequest } from '../models/register-request';
 import {
   LoginResponse,
   UsuarioSesion
@@ -22,6 +23,13 @@ export class Auth {
       datos
     );
   }
+
+  registrar(datos: RegisterRequest): Observable<any> {
+  return this.http.post<any>(
+    `${this.apiUrl}/registro`,
+    datos
+  );
+}
 
   guardarSesion(respuesta: LoginResponse): void {
     localStorage.setItem('token', respuesta.token);

@@ -1,7 +1,5 @@
 import { inject } from '@angular/core';
-import {
-  HttpInterceptorFn
-} from '@angular/common/http';
+import { HttpInterceptorFn } from '@angular/common/http';
 
 import { Auth } from '../services/auth';
 

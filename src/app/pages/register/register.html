@@ -1,1 +1,165 @@
-<p>register works!</p>
+<section
+  class="flex min-h-[75vh] items-center justify-center bg-pink-50 px-4 py-12"
+>
+  <div class="w-full max-w-md rounded-2xl bg-white p-8 shadow-lg">
+    <div class="mb-8 text-center">
+      <h1 class="text-3xl font-bold text-gray-900">
+        Crear cuenta
+      </h1>
+
+      <p class="mt-2 text-gray-600">
+        Regístrate para comprar en GlowSkin
+      </p>
+    </div>
+
+    @if (mensajeError) {
+      <div
+        class="mb-5 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
+      >
+        {{ mensajeError }}
+      </div>
+    }
+
+    @if (mensajeExito) {
+      <div
+        class="mb-5 rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700"
+      >
+        {{ mensajeExito }}
+      </div>
+    }
+
+    <form
+      [formGroup]="formulario"
+      (ngSubmit)="registrar()"
+      class="space-y-5"
+    >
+      <div>
+        <label
+          for="nombreUsuario"
+          class="mb-2 block text-sm font-semibold text-gray-700"
+        >
+          Nombre de usuario
+        </label>
+
+        <input
+          id="nombreUsuario"
+          type="text"
+          formControlName="nombreUsuario"
+          placeholder="Ejemplo: maria"
+          class="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none transition focus:border-pink-500 focus:ring-2 focus:ring-pink-200"
+        />
+
+        @if (
+          formulario.controls.nombreUsuario.touched &&
+          formulario.controls.nombreUsuario.hasError('required')
+        ) {
+          <p class="mt-1 text-sm text-red-600">
+            El nombre de usuario es obligatorio.
+          </p>
+        }
+
+        @if (
+          formulario.controls.nombreUsuario.touched &&
+          formulario.controls.nombreUsuario.hasError('minlength')
+        ) {
+          <p class="mt-1 text-sm text-red-600">
+            El nombre debe tener al menos 3 caracteres.
+          </p>
+        }
+      </div>
+
+      <div>
+        <label
+          for="correo"
+          class="mb-2 block text-sm font-semibold text-gray-700"
+        >
+          Correo electrónico
+        </label>
+
+        <input
+          id="correo"
+          type="email"
+          formControlName="correo"
+          placeholder="correo@ejemplo.com"
+          class="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none transition focus:border-pink-500 focus:ring-2 focus:ring-pink-200"
+        />
+
+        @if (
+          formulario.controls.correo.touched &&
+          formulario.controls.correo.hasError('required')
+        ) {
+          <p class="mt-1 text-sm text-red-600">
+            El correo es obligatorio.
+          </p>
+        }
+
+        @if (
+          formulario.controls.correo.touched &&
+          formulario.controls.correo.hasError('email')
+        ) {
+          <p class="mt-1 text-sm text-red-600">
+            Ingresa un correo válido.
+          </p>
+        }
+      </div>
+
+      <div>
+        <label
+          for="contrasena"
+          class="mb-2 block text-sm font-semibold text-gray-700"
+        >
+          Contraseña
+        </label>
+
+        <input
+          id="contrasena"
+          type="password"
+          formControlName="contrasena"
+          placeholder="Mínimo 4 caracteres"
+          class="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none transition focus:border-pink-500 focus:ring-2 focus:ring-pink-200"
+        />
+
+        @if (
+          formulario.controls.contrasena.touched &&
+          formulario.controls.contrasena.hasError('required')
+        ) {
+          <p class="mt-1 text-sm text-red-600">
+            La contraseña es obligatoria.
+          </p>
+        }
+
+        @if (
+          formulario.controls.contrasena.touched &&
+          formulario.controls.contrasena.hasError('minlength')
+        ) {
+          <p class="mt-1 text-sm text-red-600">
+            La contraseña debe tener al menos 4 caracteres.
+          </p>
+        }
+      </div>
+
+      <button
+        type="submit"
+        [disabled]="cargando"
+        class="w-full rounded-lg bg-pink-600 px-4 py-3 font-semibold text-white transition hover:bg-pink-700 disabled:cursor-not-allowed disabled:opacity-60"
+      >
+        @if (cargando) {
+          Registrando...
+        } @else {
+          Crear cuenta
+        }
+      </button>
+    </form>
+
+    <p class="mt-6 text-center text-sm text-gray-600">
+      ¿Ya tienes una cuenta?
+
+      <a
+        routerLink="/login"
+        class="font-semibold text-pink-600 hover:text-pink-700"
+      >
+        Inicia sesión
+      </a>
+    </p>
+  </div>
+</section>

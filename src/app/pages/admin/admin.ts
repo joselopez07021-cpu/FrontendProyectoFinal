@@ -56,7 +56,13 @@ export class Admin implements OnInit {
   mensajeErrorProducto = '';
   mensajeExitoProducto = '';
   productoEditandoId: number | null = null;
+  productoImagenPublicId = '';
   imagenSeleccionada: File | null = null;
+  modalConfirmacionAbierto = false;
+  modalConfirmacionTitulo = 'Confirmar accion';
+  modalConfirmacionMensaje = '';
+  modalConfirmacionAccion = '';
+  private accionConfirmada: (() => void) | null = null;
 
   formulario = this.formBuilder.nonNullable.group({
     nombre: [
@@ -159,8 +165,7 @@ export class Admin implements OnInit {
     this.guardando = true;
     this.changeDetector.markForCheck();
 
-    const categoria: CrearCategoriaRequest =
-      this.formulario.getRawValue();
+    const categoria = this.construirPayloadCategoria();
 
     if (this.categoriaEditandoId) {
       this.categoriaService
@@ -241,30 +246,29 @@ export class Admin implements OnInit {
   }
 
   eliminarCategoria(id: number): void {
-    const confirmar = confirm(
-      'Seguro que deseas eliminar esta categoria?'
+    this.abrirModalConfirmacion(
+      'Eliminar categoria',
+      'Seguro que deseas eliminar esta categoria?',
+      'Eliminar',
+      () => {
+        this.categoriaService.eliminarCategoria(id)
+          .subscribe({
+            next: () => {
+              this.mensajeExito =
+                'Categoria eliminada correctamente.';
+              this.cargarCategorias();
+            },
+            error: (error) => {
+              console.error(error);
+              this.mensajeError = this.obtenerMensajeError(
+                error,
+                'No fue posible eliminar la categoria. Puede que tenga productos asociados.'
+              );
+              this.changeDetector.markForCheck();
+            }
+          });
+      }
     );
-
-    if (!confirmar) {
-      return;
-    }
-
-    this.categoriaService.eliminarCategoria(id)
-      .subscribe({
-        next: () => {
-          this.mensajeExito =
-            'Categoria eliminada correctamente.';
-          this.cargarCategorias();
-        },
-        error: (error) => {
-          console.error(error);
-          this.mensajeError = this.obtenerMensajeError(
-            error,
-            'No fue posible eliminar la categoria. Puede que tenga productos asociados.'
-          );
-          this.changeDetector.markForCheck();
-        }
-      });
   }
 
   cargarProductos(): void {
@@ -306,18 +310,7 @@ export class Admin implements OnInit {
   this.guardandoProducto = true;
   this.changeDetector.markForCheck();
 
-  const datosFormulario =
-    this.formularioProducto.getRawValue();
-
-  const producto: CrearProducto = {
-    nombre: datosFormulario.nombre.trim(),
-    descripcion: datosFormulario.descripcion.trim(),
-    precio: Number(datosFormulario.precio),
-    stock: Number(datosFormulario.stock),
-    imagenUrl: datosFormulario.imagenUrl?.trim() ?? '',
-    imagenPublicId: '',
-    categoriaId: Number(datosFormulario.categoriaId)
-  };
+  const producto = this.construirPayloadProducto();
 
   if (this.productoEditandoId) {
     this.productoService
@@ -408,6 +401,8 @@ export class Admin implements OnInit {
       imagenUrl: producto.imagenUrl ?? '',
       categoriaId: producto.categoriaId
     });
+    this.productoImagenPublicId =
+      producto.imagenPublicId ?? '';
     this.mensajeErrorProducto = '';
     this.mensajeExitoProducto = '';
     this.changeDetector.markForCheck();
@@ -423,34 +418,35 @@ export class Admin implements OnInit {
       imagenUrl: '',
       categoriaId: 0
     });
+    this.productoImagenPublicId = '';
+    this.imagenSeleccionada = null;
     this.changeDetector.markForCheck();
   }
 
   eliminarProducto(id: number): void {
-    const confirmar = confirm(
-      'Seguro que deseas eliminar este producto?'
+    this.abrirModalConfirmacion(
+      'Eliminar producto',
+      'Seguro que deseas eliminar este producto?',
+      'Eliminar',
+      () => {
+        this.productoService.eliminarProducto(id)
+          .subscribe({
+            next: () => {
+              this.mensajeExitoProducto =
+                'Producto eliminado correctamente.';
+              this.cargarProductos();
+            },
+            error: (error) => {
+              console.error(error);
+              this.mensajeErrorProducto = this.obtenerMensajeError(
+                error,
+                'No fue posible eliminar el producto. Puede que este asociado a un pedido.'
+              );
+              this.changeDetector.markForCheck();
+            }
+          });
+      }
     );
-
-    if (!confirmar) {
-      return;
-    }
-
-    this.productoService.eliminarProducto(id)
-      .subscribe({
-        next: () => {
-          this.mensajeExitoProducto =
-            'Producto eliminado correctamente.';
-          this.cargarProductos();
-        },
-        error: (error) => {
-          console.error(error);
-          this.mensajeErrorProducto = this.obtenerMensajeError(
-            error,
-            'No fue posible eliminar el producto. Puede que este asociado a un pedido.'
-          );
-          this.changeDetector.markForCheck();
-        }
-      });
   }
 
   private obtenerMensajeError(
@@ -479,6 +475,32 @@ export class Admin implements OnInit {
     }
 
     return mensajePorDefecto;
+  }
+
+  private construirPayloadCategoria(): CrearCategoriaRequest {
+    const datosFormulario = this.formulario.getRawValue();
+
+    return {
+      id: this.categoriaEditandoId ?? undefined,
+      nombre: datosFormulario.nombre.trim(),
+      descripcion: datosFormulario.descripcion.trim()
+    };
+  }
+
+  private construirPayloadProducto(): CrearProducto {
+    const datosFormulario =
+      this.formularioProducto.getRawValue();
+
+    return {
+      id: this.productoEditandoId ?? undefined,
+      nombre: datosFormulario.nombre.trim(),
+      descripcion: datosFormulario.descripcion.trim(),
+      precio: Number(datosFormulario.precio),
+      stock: Number(datosFormulario.stock),
+      imagenUrl: datosFormulario.imagenUrl?.trim() ?? '',
+      imagenPublicId: this.productoImagenPublicId,
+      categoriaId: Number(datosFormulario.categoriaId)
+    };
   }
 
   cargarPedidos(): void {
@@ -539,6 +561,55 @@ export class Admin implements OnInit {
         }
       });
   }
+
+  eliminarPedido(id: number): void {
+    this.abrirModalConfirmacion(
+      'Eliminar pedido',
+      'Seguro que deseas eliminar este pedido?',
+      'Eliminar',
+      () => {
+        this.mensajeErrorPedidos = '';
+        this.mensajeExitoPedidos = '';
+
+        this.pedidoService.eliminarPedido(id)
+          .subscribe({
+            next: () => {
+              this.mensajeExitoPedidos =
+                'Pedido eliminado correctamente.';
+              this.cargarPedidos();
+            },
+            error: (error) => {
+              console.error(error);
+
+              this.mensajeErrorPedidos =
+                this.obtenerMensajeError(
+                  error,
+                  'No fue posible eliminar el pedido.'
+                );
+
+              this.changeDetector.detectChanges();
+            }
+          });
+      }
+    );
+  }
+
+  cerrarModalConfirmacion(): void {
+    this.modalConfirmacionAbierto = false;
+    this.modalConfirmacionTitulo = 'Confirmar accion';
+    this.modalConfirmacionMensaje = '';
+    this.modalConfirmacionAccion = '';
+    this.accionConfirmada = null;
+    this.changeDetector.markForCheck();
+  }
+
+  confirmarModalConfirmacion(): void {
+    const accion = this.accionConfirmada;
+
+    this.cerrarModalConfirmacion();
+    accion?.();
+  }
+
   seleccionarImagen(event: Event): void {
     const input = event.target as HTMLInputElement;
 
@@ -548,5 +619,19 @@ export class Admin implements OnInit {
     }
 
     this.imagenSeleccionada = input.files[0];
+  }
+
+  private abrirModalConfirmacion(
+    titulo: string,
+    mensaje: string,
+    accion: string,
+    onConfirmar: () => void
+  ): void {
+    this.modalConfirmacionTitulo = titulo;
+    this.modalConfirmacionMensaje = mensaje;
+    this.modalConfirmacionAccion = accion;
+    this.accionConfirmada = onConfirmar;
+    this.modalConfirmacionAbierto = true;
+    this.changeDetector.markForCheck();
   }
 }

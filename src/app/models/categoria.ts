@@ -5,6 +5,7 @@ export interface Categoria {
 }
 
 export interface CrearCategoriaRequest {
+  id?: number;
   nombre: string;
   descripcion: string;
 }

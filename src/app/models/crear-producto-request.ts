@@ -1,4 +1,5 @@
 export interface CrearProducto {
+  id?: number;
   nombre: string;
   descripcion: string;
   precio: number;

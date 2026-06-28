@@ -359,8 +359,7 @@
           </div>
 
           <button
-            type="button"
-            (click)="guardarProducto()"
+            type="submit"
             [disabled]="guardandoProducto"
             class="w-full rounded-lg bg-emerald-600 px-4 py-3 font-semibold text-white transition hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-60"
           >
@@ -641,6 +640,14 @@
                 >
                   Cancelado
                 </button>
+
+                <button
+                  type="button"
+                  (click)="eliminarPedido(pedido.id)"
+                  class="rounded-lg border border-red-300 px-4 py-2 text-sm font-semibold text-red-700 transition hover:bg-red-50"
+                >
+                  Eliminar pedido
+                </button>
               </div>
             </article>
           }
@@ -649,3 +656,52 @@
     </div>
   </div>
 </section>
+
+@if (modalConfirmacionAbierto) {
+  <div class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/35 px-4 backdrop-blur-sm">
+    <div class="w-full max-w-md rounded-3xl border border-emerald-100 bg-white p-6 shadow-2xl shadow-emerald-950/10">
+      <div class="flex items-start justify-between gap-4">
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-700">
+            Confirmacion
+          </p>
+
+          <h3 class="mt-2 text-2xl font-bold text-gray-900">
+            {{ modalConfirmacionTitulo }}
+          </h3>
+        </div>
+
+        <button
+          type="button"
+          (click)="cerrarModalConfirmacion()"
+          class="rounded-full border border-gray-200 px-3 py-1 text-sm font-semibold text-gray-500 transition hover:border-gray-300 hover:text-gray-700"
+          aria-label="Cerrar confirmacion"
+        >
+          X
+        </button>
+      </div>
+
+      <p class="mt-4 text-base leading-7 text-gray-600">
+        {{ modalConfirmacionMensaje }}
+      </p>
+
+      <div class="mt-8 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+        <button
+          type="button"
+          (click)="cerrarModalConfirmacion()"
+          class="rounded-full border border-emerald-200 px-5 py-3 text-sm font-semibold text-emerald-700 transition hover:bg-emerald-50"
+        >
+          Cancelar
+        </button>
+
+        <button
+          type="button"
+          (click)="confirmarModalConfirmacion()"
+          class="rounded-full bg-emerald-700 px-5 py-3 text-sm font-semibold text-white transition hover:bg-emerald-800"
+        >
+          {{ modalConfirmacionAccion }}
+        </button>
+      </div>
+    </div>
+  </div>
+}

@@ -402,10 +402,16 @@
             </span>
           </div>
 
-          @if (cargandoProductos) {
+          @if (cargandoProductos && productos.length === 0) {
             <p class="text-gray-600">
               Cargando productos...
             </p>
+          }
+
+          @if (cargandoProductos && productos.length > 0) {
+            <div class="mb-4 rounded-lg border border-emerald-100 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
+              Actualizando productos...
+            </div>
           }
 
           @if (!cargandoProductos && productos.length === 0) {
@@ -414,8 +420,8 @@
             </p>
           }
 
-          @if (!cargandoProductos && productos.length > 0) {
-            <div class="space-y-4">
+          @if (productos.length > 0) {
+            <div class="max-h-[42rem] space-y-4 overflow-y-auto pr-2">
               @for (producto of productos; track producto.id) {
                 <article class="flex gap-5 rounded-xl border border-gray-100 p-4">
                   <div class="h-24 w-24 shrink-0 rounded-xl bg-emerald-50">
@@ -539,7 +545,7 @@
       }
 
       @if (!cargandoPedidos && pedidos.length > 0) {
-        <div class="space-y-5">
+        <div class="max-h-[52rem] space-y-5 overflow-y-auto pr-2">
           @for (pedido of pedidos; track pedido.id) {
             <article class="rounded-xl border border-gray-100 p-5">
               <div class="flex flex-col justify-between gap-4 border-b border-gray-100 pb-4 md:flex-row md:items-center">

@@ -34,6 +34,7 @@ export class ProductosPagina implements OnInit {
   cargando = false;
   mensajeError = '';
   mensajeExito = '';
+  productoImagenActiva: Producto | null = null;
 
   ngOnInit(): void {
     this.cargarCategorias();
@@ -100,5 +101,17 @@ export class ProductosPagina implements OnInit {
       this.mensajeExito = '';
       this.changeDetector.detectChanges();
     }, 2000);
+  }
+
+  abrirImagen(producto: Producto): void {
+    if (!producto.imagenUrl || producto.imagenUrl === 'string') {
+      return;
+    }
+
+    this.productoImagenActiva = producto;
+  }
+
+  cerrarImagen(): void {
+    this.productoImagenActiva = null;
   }
 }

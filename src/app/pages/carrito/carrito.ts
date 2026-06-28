@@ -1,4 +1,9 @@
-import { Component, inject, OnInit } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  inject,
+  OnInit
+} from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 
 import { CarritoService } from '../../services/carrito';
@@ -20,11 +25,14 @@ export class CarritoPagina implements OnInit {
   private readonly pedidoService = inject(PedidoService);
   private readonly authService = inject(Auth);
   private readonly router = inject(Router);
+  private readonly changeDetector = inject(ChangeDetectorRef);
 
   items: ItemCarrito[] = [];
   total = 0;
   cargandoPedido = false;
   mensajeError = '';
+  modalPedidoExitosoAbierto = false;
+  pedidoCreadoId: number | null = null;
 
   ngOnInit(): void {
     this.cargarCarrito();
@@ -96,11 +104,11 @@ export class CarritoPagina implements OnInit {
         console.log('Pedido creado:', pedidoCreado);
 
         this.carritoService.vaciarCarrito();
+        this.cargarCarrito();
         this.cargandoPedido = false;
-
-        alert('Pedido creado correctamente.');
-
-        this.router.navigate(['/mis-pedidos']);
+        this.pedidoCreadoId = pedidoCreado.id ?? null;
+        this.modalPedidoExitosoAbierto = true;
+        this.changeDetector.detectChanges();
       },
       error: (error) => {
         console.error(error);
@@ -111,7 +119,15 @@ export class CarritoPagina implements OnInit {
           error.error ??
           error.error?.mensaje ??
           'No fue posible crear el pedido.';
+
+        this.changeDetector.detectChanges();
       }
     });
 }
+
+  cerrarModalPedidoExitoso(): void {
+    this.modalPedidoExitosoAbierto = false;
+    this.pedidoCreadoId = null;
+    this.router.navigate(['/mis-pedidos']);
+  }
 }

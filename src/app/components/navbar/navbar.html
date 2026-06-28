@@ -1,30 +1,30 @@
 <header
-  class="sticky top-0 z-50 border-b border-pink-100 bg-white shadow-sm"
+  class="sticky top-0 z-50 border-b border-emerald-100/80 bg-white/90 shadow-sm backdrop-blur"
 >
   <nav
     class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4"
   >
     <a
       routerLink="/"
-      class="text-2xl font-bold text-pink-700"
+      class="text-2xl font-semibold tracking-[0.08em] text-emerald-800"
     >
-      GlowSkin
+      DermaHous
     </a>
 
     <div class="flex items-center gap-5">
       <a
         routerLink="/"
-        routerLinkActive="text-pink-700"
+        routerLinkActive="text-emerald-700"
         [routerLinkActiveOptions]="{ exact: true }"
-        class="font-medium text-gray-700 hover:text-pink-700"
+        class="font-medium text-slate-600 transition hover:text-emerald-700"
       >
         Inicio
       </a>
 
       <a
         routerLink="/productos"
-        routerLinkActive="text-pink-700"
-        class="font-medium text-gray-700 hover:text-pink-700"
+        routerLinkActive="text-emerald-700"
+        class="font-medium text-slate-600 transition hover:text-emerald-700"
       >
         Productos
       </a>
@@ -32,16 +32,16 @@
       @if (authService.estaAutenticado()) {
         <a
           routerLink="/carrito"
-          routerLinkActive="text-pink-700"
-          class="font-medium text-gray-700 hover:text-pink-700"
+          routerLinkActive="text-emerald-700"
+          class="font-medium text-slate-600 transition hover:text-emerald-700"
         >
           Carrito
         </a>
 
         <a
           routerLink="/mis-pedidos"
-          routerLinkActive="text-pink-700"
-          class="font-medium text-gray-700 hover:text-pink-700"
+          routerLinkActive="text-emerald-700"
+          class="font-medium text-slate-600 transition hover:text-emerald-700"
         >
           Mis pedidos
         </a>
@@ -50,29 +50,29 @@
       @if (authService.esAdministrador()) {
         <a
           routerLink="/admin"
-          routerLinkActive="text-pink-700"
-          class="font-medium text-gray-700 hover:text-pink-700"
+          routerLinkActive="text-emerald-700"
+          class="font-medium text-slate-600 transition hover:text-emerald-700"
         >
           Administración
         </a>
       }
 
       @if (authService.estaAutenticado()) {
-        <span class="text-sm text-gray-600">
+        <span class="text-sm font-medium text-slate-500">
           {{ authService.obtenerUsuario()?.nombreUsuario }}
         </span>
 
         <button
           type="button"
           (click)="cerrarSesion()"
-          class="rounded-lg border border-pink-600 px-4 py-2 font-semibold text-pink-700 transition hover:bg-pink-50"
+          class="rounded-lg border border-emerald-200 px-4 py-2 font-semibold text-emerald-800 transition hover:bg-emerald-50"
         >
           Cerrar sesión
         </button>
       } @else {
         <a
           routerLink="/login"
-          class="rounded-lg bg-pink-600 px-4 py-2 font-semibold text-white transition hover:bg-pink-700"
+          class="rounded-lg bg-emerald-600 px-4 py-2 font-semibold text-white transition hover:bg-emerald-700"
         >
           Iniciar sesión
         </a>

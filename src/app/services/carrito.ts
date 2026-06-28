@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { Producto } from '../models/producto';
-import { CarritoItem } from '../models/carrito-item';
+import { ItemCarrito } from '../models/carrito-item';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +9,7 @@ import { CarritoItem } from '../models/carrito-item';
 export class CarritoService {
   private readonly storageKey = 'carrito';
 
-  obtenerCarrito(): CarritoItem[] {
+  obtenerCarrito(): ItemCarrito[] {
     const carritoGuardado = localStorage.getItem(this.storageKey);
 
     if (!carritoGuardado) {
@@ -17,7 +17,7 @@ export class CarritoService {
     }
 
     try {
-      return JSON.parse(carritoGuardado) as CarritoItem[];
+      return JSON.parse(carritoGuardado) as ItemCarrito[];
     } catch {
       this.vaciarCarrito();
       return [];
@@ -97,7 +97,7 @@ export class CarritoService {
     );
   }
 
-  private guardarCarrito(carrito: CarritoItem[]): void {
+  private guardarCarrito(carrito: ItemCarrito[]): void {
     localStorage.setItem(
       this.storageKey,
       JSON.stringify(carrito)

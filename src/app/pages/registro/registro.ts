@@ -15,10 +15,10 @@ import { Auth } from '../../services/auth';
     ReactiveFormsModule,
     RouterLink
   ],
-  templateUrl: './register.html',
-  styleUrl: './register.css',
+  templateUrl: './registro.html',
+  styleUrl: './registro.css',
 })
-export class Register {
+export class RegistroPagina {
   private readonly formBuilder = inject(FormBuilder);
   private readonly authService = inject(Auth);
   private readonly router = inject(Router);

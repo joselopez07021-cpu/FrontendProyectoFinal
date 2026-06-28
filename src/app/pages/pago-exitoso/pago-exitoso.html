@@ -1,0 +1,57 @@
+<section class="min-h-screen bg-gray-50 px-6 py-12">
+  <div class="mx-auto flex w-full max-w-7xl items-center justify-center">
+    <div class="w-full max-w-3xl rounded-2xl bg-white p-10 text-center shadow">
+    @if (cargando) {
+      <h1 class="text-3xl font-bold text-gray-900">
+        Procesando pago
+      </h1>
+
+      <p class="mt-4 text-gray-600">
+        Estamos confirmando tu pago con PayPal.
+      </p>
+    }
+
+    @if (!cargando && !mensajeError) {
+      <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-green-100 text-3xl text-green-600">
+        ✓
+      </div>
+
+      <h1 class="mt-6 text-3xl font-bold text-gray-900">
+        Pago exitoso
+      </h1>
+
+      <p class="mt-4 text-gray-600">
+        {{ mensaje }}
+      </p>
+
+      <a
+        routerLink="/mis-pedidos"
+        class="mt-8 inline-block rounded-lg bg-emerald-600 px-6 py-3 font-semibold text-white transition hover:bg-emerald-700"
+      >
+        Ver mis pedidos
+      </a>
+    }
+
+    @if (!cargando && mensajeError) {
+      <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-red-100 text-3xl text-red-600">
+        !
+      </div>
+
+      <h1 class="mt-6 text-3xl font-bold text-gray-900">
+        No se pudo confirmar el pago
+      </h1>
+
+      <p class="mt-4 text-red-600">
+        {{ mensajeError }}
+      </p>
+
+      <a
+        routerLink="/mis-pedidos"
+        class="mt-8 inline-block rounded-lg bg-emerald-600 px-6 py-3 font-semibold text-white transition hover:bg-emerald-700"
+      >
+        Volver a mis pedidos
+      </a>
+    }
+  </div>
+  </div>
+</section>

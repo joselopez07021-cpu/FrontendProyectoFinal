@@ -1,9 +1,9 @@
-export interface CrearDetallePedidoRequest {
+export interface CrearDetallePedido {
   productoId: number;
   cantidad: number;
 }
 
-export interface CrearPedidoRequest {
+export interface CrearPedido {
   usuarioId: number;
-  detalles: CrearDetallePedidoRequest[];
+  detalles: CrearDetallePedido[];
 }

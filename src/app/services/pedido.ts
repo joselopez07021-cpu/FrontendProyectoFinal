@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 import { environment } from '../../environments/environment';
 import { Pedido } from '../models/pedido';
-import { CrearPedidoRequest } from '../models/crear-pedido-request';
+import { CrearPedido } from '../models/crear-pedido-request';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +13,7 @@ export class PedidoService {
   private readonly http = inject(HttpClient);
   private readonly apiUrl = `${environment.apiUrl}/Pedidos`;
 
-  crearPedido(pedido: CrearPedidoRequest): Observable<Pedido> {
+  crearPedido(pedido: CrearPedido): Observable<Pedido> {
     return this.http.post<Pedido>(this.apiUrl, pedido);
   }
 

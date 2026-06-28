@@ -5,7 +5,7 @@ export interface UsuarioSesion {
   rol: string;
 }
 
-export interface LoginResponse {
+export interface LoginRespuesta {
   mensaje: string;
   token: string;
   usuario: UsuarioSesion;

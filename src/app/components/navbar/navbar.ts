@@ -26,6 +26,6 @@ export class Navbar {
 
   cerrarSesion(): void {
     this.authService.cerrarSesion();
-    this.router.navigate(['/']);
+    this.router.navigate(['/login']);
   }
 }

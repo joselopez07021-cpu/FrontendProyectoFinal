@@ -1,4 +1,4 @@
-export interface LoginRequest {
+export interface LoginPeticion {
   correo: string;
   contrasena: string;
 }

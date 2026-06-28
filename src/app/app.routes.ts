@@ -14,44 +14,44 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./pages/home/home')
         .then((m) => m.Home),
-    title: 'Inicio | GlowSkin'
+    title: 'Inicio | DermaHous'
   },
   {
     path: 'login',
     loadComponent: () =>
       import('./pages/login/login')
         .then((m) => m.Login),
-    title: 'Iniciar sesión | GlowSkin'
+    title: 'Iniciar sesión | DermaHous'
   },
   {
     path: 'registro',
     loadComponent: () =>
-      import('./pages/register/register')
-        .then((m) => m.Register),
-    title: 'Registro | GlowSkin'
+      import('./pages/registro/registro')
+        .then((m) => m.RegistroPagina),
+    title: 'Registro | DermaHous'
   },
   {
     path: 'productos',
     loadComponent: () =>
-      import('./pages/products/products')
-        .then((m) => m.Products),
-    title: 'Productos | GlowSkin'
+      import('./pages/productos/productos')
+        .then((m) => m.ProductosPagina),
+    title: 'Productos | DermaHous'
   },
   {
     path: 'carrito',
     loadComponent: () =>
-      import('./pages/cart/cart')
-        .then((m) => m.Cart),
+      import('./pages/carrito/carrito')
+        .then((m) => m.CarritoPagina),
     canActivate: [authGuard],
-    title: 'Carrito | GlowSkin'
+    title: 'Carrito | DermaHous'
   },
   {
     path: 'mis-pedidos',
     loadComponent: () =>
-      import('./pages/my-orders/my-orders')
-        .then((m) => m.MyOrders),
+      import('./pages/mis-pedidos/mis-pedidos')
+        .then((m) => m.MisPedidosPagina),
     canActivate: [authGuard],
-    title: 'Mis pedidos | GlowSkin'
+    title: 'Mis pedidos | DermaHous'
   },
   {
     path: 'admin',
@@ -62,8 +62,15 @@ export const routes: Routes = [
       authGuard,
       adminGuard
     ],
-    title: 'Administración | GlowSkin'
+    title: 'Administración | DermaHous'
   },
+  {
+  path: 'pago-exitoso',
+  loadComponent: () =>
+    import('./pages/pago-exitoso/pago-exitoso')
+      .then((m) => m.PagoExitoso),
+  title: 'Pago exitoso | DermaHous'
+},
   {
     path: '**',
     redirectTo: ''

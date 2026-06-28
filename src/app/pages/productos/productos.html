@@ -1,7 +1,7 @@
 <section class="min-h-screen bg-gray-50 px-6 py-12">
-  <div class="mx-auto max-w-7xl">
-    <div class="mb-10">
-      <p class="text-sm font-semibold uppercase tracking-wide text-pink-600">
+  <div class="mx-auto w-full max-w-7xl">
+    <div class="mb-10 max-w-3xl">
+      <p class="text-sm font-semibold uppercase tracking-wide text-emerald-700">
         Catálogo
       </p>
 
@@ -9,10 +9,44 @@
         Productos de skincare
       </h1>
 
-      <p class="mt-3 max-w-2xl text-gray-600">
-        Explora nuestros productos disponibles y agrega tus favoritos al carrito.
+      <p class="mt-3 text-gray-600">
+        Explora nuestros productos disponibles y filtra por categoría.
       </p>
     </div>
+
+    <div class="mb-8 flex flex-wrap gap-3">
+      <button
+        type="button"
+        (click)="filtrarPorCategoria(0)"
+        class="rounded-full px-5 py-2 text-sm font-semibold transition"
+        [class.bg-emerald-600]="categoriaSeleccionadaId === 0"
+        [class.text-white]="categoriaSeleccionadaId === 0"
+        [class.bg-white]="categoriaSeleccionadaId !== 0"
+        [class.text-gray-700]="categoriaSeleccionadaId !== 0"
+      >
+        Todos
+      </button>
+
+      @for (categoria of categorias; track categoria.id) {
+        <button
+          type="button"
+          (click)="filtrarPorCategoria(categoria.id)"
+          class="rounded-full px-5 py-2 text-sm font-semibold transition"
+          [class.bg-emerald-600]="categoriaSeleccionadaId === categoria.id"
+          [class.text-white]="categoriaSeleccionadaId === categoria.id"
+          [class.bg-white]="categoriaSeleccionadaId !== categoria.id"
+          [class.text-gray-700]="categoriaSeleccionadaId !== categoria.id"
+        >
+          {{ categoria.nombre }}
+        </button>
+      }
+    </div>
+
+    @if (mensajeExito) {
+      <div class="mb-6 rounded-lg border border-green-200 bg-green-50 p-4 text-sm text-green-700">
+        {{ mensajeExito }}
+      </div>
+    }
 
     @if (cargando) {
       <div class="rounded-xl bg-white p-8 text-center shadow">
@@ -28,19 +62,19 @@
       </div>
     }
 
-    @if (!cargando && !mensajeError && productos.length === 0) {
+    @if (!cargando && !mensajeError && productosFiltrados.length === 0) {
       <div class="rounded-xl bg-white p-8 text-center shadow">
         <p class="text-gray-600">
-          No hay productos registrados.
+          No hay productos en esta categoría.
         </p>
       </div>
     }
 
-    @if (!cargando && !mensajeError && productos.length > 0) {
+    @if (!cargando && !mensajeError && productosFiltrados.length > 0) {
       <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-        @for (producto of productos; track producto.id) {
+        @for (producto of productosFiltrados; track producto.id) {
           <article class="rounded-2xl bg-white shadow transition hover:shadow-lg">
-            <div class="h-56 rounded-t-2xl bg-pink-50">
+            <div class="h-56 rounded-t-2xl bg-emerald-50">
               @if (
                 producto.imagenUrl &&
                 producto.imagenUrl !== 'string'
@@ -51,7 +85,7 @@
                   class="h-full w-full rounded-t-2xl object-cover"
                 />
               } @else {
-                <div class="flex h-full items-center justify-center text-pink-500">
+                <div class="flex h-full items-center justify-center text-emerald-500">
                   Sin imagen disponible
                 </div>
               }
@@ -67,7 +101,7 @@
               </p>
 
               <div class="mt-5 flex items-center justify-between">
-                <span class="text-2xl font-bold text-pink-600">
+                <span class="text-2xl font-bold text-emerald-700">
                   ₡{{ producto.precio }}
                 </span>
 
@@ -89,7 +123,7 @@
                 type="button"
                 (click)="agregarAlCarrito(producto)"
                 [disabled]="producto.stock <= 0"
-                class="mt-6 w-full rounded-lg bg-pink-600 px-4 py-3 font-semibold text-white transition hover:bg-pink-700 disabled:cursor-not-allowed disabled:bg-gray-300"
+                class="mt-6 w-full rounded-lg bg-emerald-600 px-4 py-3 font-semibold text-white transition hover:bg-emerald-700 disabled:cursor-not-allowed disabled:bg-gray-300"
               >
                 @if (producto.stock > 0) {
                   Agregar al carrito

@@ -5,23 +5,23 @@ import { CarritoService } from '../../services/carrito';
 import { PedidoService } from '../../services/pedido';
 import { Auth } from '../../services/auth';
 
-import { CarritoItem } from '../../models/carrito-item';
+import { ItemCarrito } from '../../models/carrito-item';
 
 @Component({
   selector: 'app-cart',
   imports: [
     RouterLink
   ],
-  templateUrl: './cart.html',
-  styleUrl: './cart.css'
+  templateUrl: './carrito.html',
+  styleUrl: './carrito.css'
 })
-export class Cart implements OnInit {
+export class CarritoPagina implements OnInit {
   private readonly carritoService = inject(CarritoService);
   private readonly pedidoService = inject(PedidoService);
   private readonly authService = inject(Auth);
   private readonly router = inject(Router);
 
-  items: CarritoItem[] = [];
+  items: ItemCarrito[] = [];
   total = 0;
   cargandoPedido = false;
   mensajeError = '';
@@ -35,7 +35,7 @@ export class Cart implements OnInit {
     this.total = this.carritoService.obtenerTotal();
   }
 
-  aumentarCantidad(item: CarritoItem): void {
+  aumentarCantidad(item: ItemCarrito): void {
     this.carritoService.actualizarCantidad(
       item.producto.id,
       item.cantidad + 1
@@ -44,7 +44,7 @@ export class Cart implements OnInit {
     this.cargarCarrito();
   }
 
-  disminuirCantidad(item: CarritoItem): void {
+  disminuirCantidad(item: ItemCarrito): void {
     this.carritoService.actualizarCantidad(
       item.producto.id,
       item.cantidad - 1

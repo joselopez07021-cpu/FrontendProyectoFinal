@@ -1,1 +1,651 @@
-<p>admin works!</p>
+<section class="min-h-screen bg-gray-50 px-6 py-12">
+  <div class="mx-auto w-full max-w-7xl space-y-12">
+    <div class="max-w-3xl">
+      <p class="text-sm font-semibold uppercase tracking-wide text-emerald-700">
+        Administración
+      </p>
+
+      <h1 class="mt-2 text-4xl font-bold text-gray-900">
+        Panel administrativo
+      </h1>
+
+      <p class="mt-3 text-gray-600">
+        Gestiona las categorías y productos de la tienda.
+      </p>
+    </div>
+
+    <div class="grid gap-8 lg:grid-cols-3">
+      <div class="rounded-2xl bg-white p-6 shadow">
+        <h2 class="text-2xl font-bold text-gray-900">
+          @if (categoriaEditandoId) {
+            Editar categoría
+          } @else {
+            Crear categoría
+          }
+        </h2>
+
+        @if (mensajeError) {
+          <div class="mt-5 rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+            {{ mensajeError }}
+          </div>
+        }
+
+        @if (mensajeExito) {
+          <div class="mt-5 rounded-lg border border-green-200 bg-green-50 p-4 text-sm text-green-700">
+            {{ mensajeExito }}
+          </div>
+        }
+
+        <form
+          [formGroup]="formulario"
+          (ngSubmit)="guardarCategoria()"
+          class="mt-6 space-y-5"
+        >
+          <div>
+            <label
+              for="nombre"
+              class="mb-2 block text-sm font-semibold text-gray-700"
+            >
+              Nombre
+            </label>
+
+            <input
+              id="nombre"
+              type="text"
+              formControlName="nombre"
+              placeholder="Ej: Limpiadores"
+              class="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
+            />
+
+            @if (
+              formulario.controls.nombre.touched &&
+              formulario.controls.nombre.hasError('required')
+            ) {
+              <p class="mt-1 text-sm text-red-600">
+                El nombre es obligatorio.
+              </p>
+            }
+          </div>
+
+          <div>
+            <label
+              for="descripcion"
+              class="mb-2 block text-sm font-semibold text-gray-700"
+            >
+              Descripción
+            </label>
+
+            <textarea
+              id="descripcion"
+              formControlName="descripcion"
+              rows="4"
+              placeholder="Descripción de la categoría"
+              class="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
+            ></textarea>
+
+            @if (
+              formulario.controls.descripcion.touched &&
+              formulario.controls.descripcion.hasError('required')
+            ) {
+              <p class="mt-1 text-sm text-red-600">
+                La descripción es obligatoria.
+              </p>
+            }
+          </div>
+
+          <button
+            type="submit"
+            [disabled]="guardando"
+            class="w-full rounded-lg bg-emerald-600 px-4 py-3 font-semibold text-white transition hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            @if (guardando) {
+              Guardando...
+            } @else if (categoriaEditandoId) {
+              Actualizar categoría
+            } @else {
+              Crear categoría
+            }
+          </button>
+
+          @if (categoriaEditandoId) {
+            <button
+              type="button"
+              (click)="cancelarEdicion()"
+              class="w-full rounded-lg border border-gray-300 px-4 py-3 font-semibold text-gray-700 transition hover:bg-gray-50"
+            >
+              Cancelar edición
+            </button>
+          }
+        </form>
+      </div>
+
+      <div class="lg:col-span-2">
+        <div class="rounded-2xl bg-white p-6 shadow">
+          <div class="mb-6 flex items-center justify-between">
+            <h2 class="text-2xl font-bold text-gray-900">
+              Categorías registradas
+            </h2>
+
+            <span class="rounded-full bg-emerald-100 px-4 py-2 text-sm font-semibold text-emerald-800">
+              {{ categorias.length }} categorías
+            </span>
+          </div>
+
+          @if (cargando) {
+            <p class="text-gray-600">
+              Cargando categorías...
+            </p>
+          }
+
+          @if (!cargando && categorias.length === 0) {
+            <p class="text-gray-600">
+              No hay categorías registradas.
+            </p>
+          }
+
+          @if (!cargando && categorias.length > 0) {
+            <div class="overflow-hidden rounded-xl border border-gray-100">
+              <table class="w-full text-left">
+                <thead class="bg-gray-50">
+                  <tr>
+                    <th class="px-5 py-4 text-sm font-semibold text-gray-600">
+                      Nombre
+                    </th>
+
+                    <th class="px-5 py-4 text-sm font-semibold text-gray-600">
+                      Descripción
+                    </th>
+
+                    <th class="px-5 py-4 text-right text-sm font-semibold text-gray-600">
+                      Acciones
+                    </th>
+                  </tr>
+                </thead>
+
+                <tbody class="divide-y divide-gray-100">
+                  @for (categoria of categorias; track categoria.id) {
+                    <tr>
+                      <td class="px-5 py-4 font-semibold text-gray-900">
+                        {{ categoria.nombre }}
+                      </td>
+
+                      <td class="px-5 py-4 text-gray-600">
+                        {{ categoria.descripcion }}
+                      </td>
+
+                      <td class="px-5 py-4">
+                        <div class="flex justify-end gap-3">
+                          <button
+                            type="button"
+                            (click)="editarCategoria(categoria)"
+                            class="rounded-lg border border-blue-200 px-4 py-2 text-sm font-semibold text-blue-600 transition hover:bg-blue-50"
+                          >
+                            Editar
+                          </button>
+
+                          <button
+                            type="button"
+                            (click)="eliminarCategoria(categoria.id)"
+                            class="rounded-lg border border-red-200 px-4 py-2 text-sm font-semibold text-red-600 transition hover:bg-red-50"
+                          >
+                            Eliminar
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+
+    <div class="grid gap-8 lg:grid-cols-3">
+      <div class="rounded-2xl bg-white p-6 shadow">
+        <h2 class="text-2xl font-bold text-gray-900">
+          @if (productoEditandoId) {
+            Editar producto
+          } @else {
+            Crear producto
+          }
+        </h2>
+
+        @if (mensajeErrorProducto) {
+          <div class="mt-5 rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+            {{ mensajeErrorProducto }}
+          </div>
+        }
+
+        @if (mensajeExitoProducto) {
+          <div class="mt-5 rounded-lg border border-green-200 bg-green-50 p-4 text-sm text-green-700">
+            {{ mensajeExitoProducto }}
+          </div>
+        }
+
+        <form
+          [formGroup]="formularioProducto"
+          (ngSubmit)="guardarProducto()"
+          class="mt-6 space-y-5"
+        >
+          <div>
+            <label
+              for="productoNombre"
+              class="mb-2 block text-sm font-semibold text-gray-700"
+            >
+              Nombre
+            </label>
+
+            <input
+              id="productoNombre"
+              type="text"
+              formControlName="nombre"
+              placeholder="Ej: Nivea Gel Limpiador Facial"
+              class="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
+            />
+            @if (
+              formularioProducto.controls.nombre.touched &&
+              formularioProducto.controls.nombre.hasError('required')
+            ) {
+              <p class="mt-1 text-sm text-red-600">
+                El nombre es obligatorio.
+              </p>
+            }
+          </div>
+
+          <div>
+            <label
+              for="productoDescripcion"
+              class="mb-2 block text-sm font-semibold text-gray-700"
+            >
+              Descripción
+            </label>
+
+            <textarea
+              id="productoDescripcion"
+              formControlName="descripcion"
+              rows="4"
+              placeholder="Descripción del producto"
+              class="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
+            ></textarea>
+          </div>
+
+          <div class="grid gap-4 md:grid-cols-2">
+            <div>
+              <label
+                for="precio"
+                class="mb-2 block text-sm font-semibold text-gray-700"
+              >
+                Precio
+              </label>
+
+              <input
+                id="precio"
+                type="number"
+                formControlName="precio"
+                min="1"
+                class="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
+              />
+            </div>
+
+            <div>
+              <label
+                for="stock"
+                class="mb-2 block text-sm font-semibold text-gray-700"
+              >
+                Stock
+              </label>
+
+              <input
+                id="stock"
+                type="number"
+                formControlName="stock"
+                min="0"
+                class="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label
+              for="categoriaId"
+              class="mb-2 block text-sm font-semibold text-gray-700"
+            >
+              Categoría
+            </label>
+
+            <select
+              id="categoriaId"
+              formControlName="categoriaId"
+              class="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
+            >
+              <option [value]="0">
+                Selecciona una categoría
+              </option>
+
+              @for (categoria of categorias; track categoria.id) {
+                <option [value]="categoria.id">
+                  {{ categoria.nombre }}
+                </option>
+              }
+            </select>
+          </div>
+
+          <div>
+            <label
+              for="imagen"
+              class="mb-2 block text-sm font-semibold text-gray-700"
+            >
+              Imagen del producto
+            </label>
+
+            <input
+              id="imagen"
+              type="file"
+              accept="image/*"
+              (change)="seleccionarImagen($event)"
+              class="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none transition file:mr-4 file:rounded-lg file:border-0 file:bg-emerald-100 file:px-4 file:py-2 file:font-semibold file:text-emerald-800 hover:file:bg-emerald-200"
+            />
+
+            @if (imagenSeleccionada) {
+              <p class="mt-2 text-sm text-gray-600">
+                Imagen seleccionada:
+                <span class="font-semibold">
+                  {{ imagenSeleccionada.name }}
+                </span>
+              </p>
+            }
+          </div>
+
+          <button
+            type="button"
+            (click)="guardarProducto()"
+            [disabled]="guardandoProducto"
+            class="w-full rounded-lg bg-emerald-600 px-4 py-3 font-semibold text-white transition hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            @if (guardandoProducto) {
+              Guardando...
+            } @else if (productoEditandoId) {
+              Actualizar producto
+            } @else {
+              Crear producto
+            }
+          </button>
+
+          @if (formularioProducto.touched && formularioProducto.invalid) {
+            <p class="text-sm text-red-600">
+              Revisa el formulario: nombre, descripcion, precio y categoria son obligatorios.
+            </p>
+          }
+
+          @if (productoEditandoId) {
+            <button
+              type="button"
+              (click)="cancelarEdicionProducto()"
+              class="w-full rounded-lg border border-gray-300 px-4 py-3 font-semibold text-gray-700 transition hover:bg-gray-50"
+            >
+              Cancelar edición
+            </button>
+          }
+        </form>
+      </div>
+
+      <div class="lg:col-span-2">
+        <div class="rounded-2xl bg-white p-6 shadow">
+          <div class="mb-6 flex items-center justify-between">
+            <h2 class="text-2xl font-bold text-gray-900">
+              Productos registrados
+            </h2>
+
+            <span class="rounded-full bg-emerald-100 px-4 py-2 text-sm font-semibold text-emerald-800">
+              {{ productos.length }} productos
+            </span>
+          </div>
+
+          @if (cargandoProductos) {
+            <p class="text-gray-600">
+              Cargando productos...
+            </p>
+          }
+
+          @if (!cargandoProductos && productos.length === 0) {
+            <p class="text-gray-600">
+              No hay productos registrados.
+            </p>
+          }
+
+          @if (!cargandoProductos && productos.length > 0) {
+            <div class="space-y-4">
+              @for (producto of productos; track producto.id) {
+                <article class="flex gap-5 rounded-xl border border-gray-100 p-4">
+                  <div class="h-24 w-24 shrink-0 rounded-xl bg-emerald-50">
+                    @if (
+                      producto.imagenUrl &&
+                      producto.imagenUrl !== 'string'
+                    ) {
+                      <img
+                        [src]="producto.imagenUrl"
+                        [alt]="producto.nombre"
+                        class="h-full w-full rounded-xl object-cover"
+                      />
+                    } @else {
+                      <div class="flex h-full items-center justify-center text-xs text-emerald-500">
+                        Sin imagen
+                      </div>
+                    }
+                  </div>
+
+                  <div class="flex flex-1 flex-col justify-between">
+                    <div>
+                      <h3 class="font-bold text-gray-900">
+                        {{ producto.nombre }}
+                      </h3>
+
+                      <p class="mt-1 text-sm text-gray-600">
+                        {{ producto.descripcion }}
+                      </p>
+
+                      <div class="mt-2 flex flex-wrap gap-3 text-sm text-gray-500">
+                        <span>
+                          Precio:
+                          <strong class="text-emerald-700">
+                            ₡{{ producto.precio }}
+                          </strong>
+                        </span>
+
+                        <span>
+                          Stock:
+                          <strong>
+                            {{ producto.stock }}
+                          </strong>
+                        </span>
+
+                        @if (producto.categoria) {
+                          <span>
+                            Categoría:
+                            <strong>
+                              {{ producto.categoria.nombre }}
+                            </strong>
+                          </span>
+                        }
+                      </div>
+                    </div>
+
+                    <div class="mt-4 flex gap-3">
+                      <button
+                        type="button"
+                        (click)="editarProducto(producto)"
+                        class="rounded-lg border border-blue-200 px-4 py-2 text-sm font-semibold text-blue-600 transition hover:bg-blue-50"
+                      >
+                        Editar
+                      </button>
+
+                      <button
+                        type="button"
+                        (click)="eliminarProducto(producto.id)"
+                        class="rounded-lg border border-red-200 px-4 py-2 text-sm font-semibold text-red-600 transition hover:bg-red-50"
+                      >
+                        Eliminar
+                      </button>
+                    </div>
+                  </div>
+                </article>
+              }
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+
+    <div class="rounded-2xl bg-white p-6 shadow">
+      <div class="mb-6 flex items-center justify-between">
+        <div>
+          <h2 class="text-2xl font-bold text-gray-900">
+            Pedidos registrados
+          </h2>
+
+          <p class="mt-2 text-gray-600">
+            Revisa las compras realizadas por los usuarios.
+          </p>
+        </div>
+
+        <span class="rounded-full bg-emerald-100 px-4 py-2 text-sm font-semibold text-emerald-800">
+          {{ pedidos.length }} pedidos
+        </span>
+      </div>
+
+      @if (mensajeErrorPedidos) {
+        <div class="mb-5 rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+          {{ mensajeErrorPedidos }}
+        </div>
+      }
+
+      @if (mensajeExitoPedidos) {
+        <div class="mb-5 rounded-lg border border-green-200 bg-green-50 p-4 text-sm text-green-700">
+          {{ mensajeExitoPedidos }}
+        </div>
+      }
+
+      @if (cargandoPedidos) {
+        <p class="text-gray-600">
+          Cargando pedidos...
+        </p>
+      }
+
+      @if (!cargandoPedidos && pedidos.length === 0) {
+        <p class="text-gray-600">
+          No hay pedidos registrados.
+        </p>
+      }
+
+      @if (!cargandoPedidos && pedidos.length > 0) {
+        <div class="space-y-5">
+          @for (pedido of pedidos; track pedido.id) {
+            <article class="rounded-xl border border-gray-100 p-5">
+              <div class="flex flex-col justify-between gap-4 border-b border-gray-100 pb-4 md:flex-row md:items-center">
+                <div>
+                  <h3 class="text-xl font-bold text-gray-900">
+                    Pedido #{{ pedido.id }}
+                  </h3>
+
+                  <p class="mt-1 text-sm text-gray-500">
+                    Usuario ID: {{ pedido.usuarioId }}
+                  </p>
+
+                  <p class="mt-1 text-sm text-gray-500">
+                    Fecha: {{ pedido.fechaPedido }}
+                  </p>
+                </div>
+
+                <div class="flex flex-wrap items-center gap-3">
+                  <span class="rounded-full bg-yellow-100 px-4 py-2 text-sm font-semibold text-yellow-700">
+                    {{ pedido.estado }}
+                  </span>
+
+                  <span class="text-xl font-bold text-emerald-700">
+                    ₡{{ pedido.total }}
+                  </span>
+                </div>
+              </div>
+
+              @if (pedido.detallesPedido && pedido.detallesPedido.length > 0) {
+                <div class="mt-5 space-y-3">
+                  @for (detalle of pedido.detallesPedido; track detalle.id) {
+                    <div class="flex justify-between rounded-lg bg-gray-50 p-4">
+                      <div>
+                        <p class="font-semibold text-gray-900">
+                          @if (detalle.producto) {
+                            {{ detalle.producto.nombre }}
+                          } @else {
+                            Producto ID: {{ detalle.productoId }}
+                          }
+                        </p>
+
+                        <p class="text-sm text-gray-500">
+                          Cantidad: {{ detalle.cantidad }}
+                        </p>
+                      </div>
+
+                      <div class="text-right">
+                        <p class="font-semibold text-gray-900">
+                          ₡{{ detalle.subtotal }}
+                        </p>
+
+                        <p class="text-sm text-gray-500">
+                          ₡{{ detalle.precioUnitario }} c/u
+                        </p>
+                      </div>
+                    </div>
+                  }
+                </div>
+              }
+
+              <div class="mt-5 flex flex-wrap gap-3">
+                <button
+                  type="button"
+                  (click)="cambiarEstadoPedido(pedido, 'Pendiente')"
+                  class="rounded-lg border border-yellow-200 px-4 py-2 text-sm font-semibold text-yellow-700 transition hover:bg-yellow-50"
+                >
+                  Pendiente
+                </button>
+
+                <button
+                  type="button"
+                  (click)="cambiarEstadoPedido(pedido, 'Pagado')"
+                  class="rounded-lg border border-green-200 px-4 py-2 text-sm font-semibold text-green-700 transition hover:bg-green-50"
+                >
+                  Pagado
+                </button>
+
+                <button
+                  type="button"
+                  (click)="cambiarEstadoPedido(pedido, 'Enviado')"
+                  class="rounded-lg border border-blue-200 px-4 py-2 text-sm font-semibold text-blue-700 transition hover:bg-blue-50"
+                >
+                  Enviado
+                </button>
+
+                <button
+                  type="button"
+                  (click)="cambiarEstadoPedido(pedido, 'Entregado')"
+                  class="rounded-lg border border-emerald-200 px-4 py-2 text-sm font-semibold text-emerald-700 transition hover:bg-emerald-50"
+                >
+                  Entregado
+                </button>
+
+                <button
+                  type="button"
+                  (click)="cambiarEstadoPedido(pedido, 'Cancelado')"
+                  class="rounded-lg border border-red-200 px-4 py-2 text-sm font-semibold text-red-700 transition hover:bg-red-50"
+                >
+                  Cancelado
+                </button>
+              </div>
+            </article>
+          }
+        </div>
+      }
+    </div>
+  </div>
+</section>

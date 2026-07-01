@@ -6,9 +6,20 @@
   >
     <a
       routerLink="/"
-      class="text-2xl font-semibold tracking-[0.08em] text-emerald-800"
+      class="inline-flex items-center gap-3.5 no-underline"
     >
-      DermaHous
+      <span
+        class="inline-flex h-12 w-12 items-center justify-center rounded-2xl border border-emerald-200/95 bg-[linear-gradient(145deg,#f7fffb_0%,#ecfdf5_100%)] shadow-[0_10px_30px_rgba(16,185,129,0.12)]"
+      >
+        <img
+          src="/assets/img/logo2.png"
+          alt="DermaHous"
+          class="h-8 w-8 object-contain"
+        />
+      </span>
+      <span class="hidden text-2xl font-semibold tracking-[0.08em] text-emerald-800 sm:inline">
+        DermaHous
+      </span>
     </a>
 
     <div class="flex items-center gap-5">
@@ -53,7 +64,7 @@
           routerLinkActive="text-emerald-700"
           class="font-medium text-slate-600 transition hover:text-emerald-700"
         >
-          Administración
+          Administracion
         </a>
       }
 
@@ -67,14 +78,14 @@
           (click)="cerrarSesion()"
           class="rounded-lg border border-emerald-200 px-4 py-2 font-semibold text-emerald-800 transition hover:bg-emerald-50"
         >
-          Cerrar sesión
+          Cerrar sesion
         </button>
       } @else {
         <a
           routerLink="/login"
           class="rounded-lg bg-emerald-600 px-4 py-2 font-semibold text-white transition hover:bg-emerald-700"
         >
-          Iniciar sesión
+          Iniciar sesion
         </a>
       }
     </div>

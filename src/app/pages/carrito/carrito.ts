@@ -17,8 +17,7 @@ import { ItemCarrito } from '../../models/carrito-item';
   imports: [
     RouterLink
   ],
-  templateUrl: './carrito.html',
-  styleUrl: './carrito.css'
+  templateUrl: './carrito.html'
 })
 export class CarritoPagina implements OnInit {
   private readonly carritoService = inject(CarritoService);

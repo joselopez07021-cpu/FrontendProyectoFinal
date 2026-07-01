@@ -16,8 +16,7 @@ import { CarritoService } from '../../services/carrito';
 @Component({
   selector: 'app-products',
   imports: [],
-  templateUrl: './productos.html',
-  styleUrl: './productos.css'
+  templateUrl: './productos.html'
 })
 export class ProductosPagina implements OnInit {
   private readonly productoService = inject(ProductoService);

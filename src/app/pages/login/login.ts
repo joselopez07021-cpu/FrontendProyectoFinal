@@ -15,8 +15,7 @@ import { Auth } from '../../services/auth';
     ReactiveFormsModule,
     RouterLink
   ],
-  templateUrl: './login.html',
-  styleUrl: './login.css'
+  templateUrl: './login.html'
 })
 export class Login {
   private readonly formBuilder = inject(FormBuilder);

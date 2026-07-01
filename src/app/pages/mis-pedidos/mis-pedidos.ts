@@ -17,8 +17,7 @@ import { PagoService } from '../../services/pago';
   imports: [
     RouterLink
   ],
-  templateUrl: './mis-pedidos.html',
-  styleUrl: './mis-pedidos.css'
+  templateUrl: './mis-pedidos.html'
 })
 export class MisPedidosPagina implements OnInit {
   private readonly pedidoService = inject(PedidoService);

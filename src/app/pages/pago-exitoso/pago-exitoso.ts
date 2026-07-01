@@ -17,8 +17,7 @@ import { PagoService } from '../../services/pago';
   imports: [
     RouterLink
   ],
-  templateUrl: './pago-exitoso.html',
-  styleUrl: './pago-exitoso.css'
+  templateUrl: './pago-exitoso.html'
 })
 export class PagoExitoso implements OnInit {
   private readonly route = inject(ActivatedRoute);

@@ -16,7 +16,6 @@ import { Auth } from '../../services/auth';
     RouterLink
   ],
   templateUrl: './registro.html',
-  styleUrl: './registro.css',
 })
 export class RegistroPagina {
   private readonly formBuilder = inject(FormBuilder);

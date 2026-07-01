@@ -10,8 +10,7 @@ import { Footer } from './components/footer/footer';
     Navbar,
     Footer
   ],
-  templateUrl: './app.html',
-  styleUrl: './app.css'
+  templateUrl: './app.html'
 })
 export class App {
   protected readonly title = 'tienda-skincare';

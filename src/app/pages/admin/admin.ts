@@ -28,8 +28,7 @@ import { CrearProducto } from '../../models/crear-producto-request';
   imports: [
     ReactiveFormsModule
   ],
-  templateUrl: './admin.html',
-  styleUrl: './admin.css'
+  templateUrl: './admin.html'
 })
 export class Admin implements OnInit {
   private readonly categoriaService = inject(CategoriaService);
